@@ -1,0 +1,11 @@
+C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\bin\Debug\CoreInstall.exe.config
+C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\bin\Debug\CoreInstall.exe
+C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\bin\Debug\CoreInstall.pdb
+C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\bin\Debug\Renci.SshNet.dll
+C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\bin\Debug\Renci.SshNet.xml
+C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.csprojResolveAssemblyReference.cache
+C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.Form1.resources
+C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.Properties.Resources.resources
+C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.csproj.GenerateResource.Cache
+C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.exe
+C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.pdb
