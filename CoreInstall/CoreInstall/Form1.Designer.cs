@@ -101,6 +101,7 @@
             this.button2.TabIndex = 11;
             this.button2.Text = "Log in and begin setup";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // textBox5
             // 
@@ -108,7 +109,6 @@
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(499, 20);
             this.textBox5.TabIndex = 10;
-            this.textBox5.UseSystemPasswordChar = true;
             // 
             // label5
             // 
@@ -125,7 +125,6 @@
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(499, 20);
             this.textBox4.TabIndex = 8;
-            this.textBox4.UseSystemPasswordChar = true;
             // 
             // label4
             // 

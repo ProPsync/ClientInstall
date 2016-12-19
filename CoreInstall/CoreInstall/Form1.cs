@@ -10,6 +10,7 @@ using System.Net;
 using System.Windows.Forms;
 using System.IO;
 using Renci.SshNet;
+using System.Diagnostics;
 
 namespace CoreInstall
 {
@@ -92,13 +93,62 @@ namespace CoreInstall
                     mediarepo = SubstringExtensions.Between(config, "<mediarepo>", @"</mediarepo>");
                     prefrepo = SubstringExtensions.Between(config, "<prefrepo>", @"</prefrepo>");
 
+                    dns = SubstringExtensions.Between(config, "<dns>", @"</dns>");
 
-                    
                 }
             }catch (Exception ex)
             {
                 MessageBox.Show("There was an error connecting to the server.  Please check the URL and your connection and try again.  Technical details: " + Environment.NewLine + ex.Message.ToString());
             }
+
+           
+        }
+
+        private void doinstall()
+        {
+            //Check for and install git here
+
+            try
+            {
+                Process cmd = new Process();
+                cmd.StartInfo.FileName = Environment.SystemDirectory + @"\cmd.exe";
+                cmd.StartInfo.Arguments = (@"/C ssh-keygen -t rsa -b 4096 -C """ + textBox5.Text + @""" -f %userprofile%\.ssh\id_rsa -q -N """"");
+                cmd.Start();
+                cmd.WaitForExit();
+                cmd.StartInfo.Arguments = (@"/C eval $(ssh-agent -s)");
+                cmd.Start();
+                cmd.WaitForExit();
+                cmd.StartInfo.Arguments = (@"/C ssh-add %userprofile%\.ssh\id_rsa");
+                cmd.Start();
+                cmd.WaitForExit();
+                cmd.StartInfo.Arguments = (@"/C cat %userprofile%\.ssh\id_rsa.pub");
+                cmd.StartInfo.UseShellExecute = false;
+                cmd.StartInfo.RedirectStandardOutput = true;
+                cmd.Start();
+                cmd.WaitForExit();
+                string pubkey = cmd.StandardOutput.ReadToEnd();
+                using (var client = new SshClient(dns, textBox2.Text, textBox3.Text))
+                {
+                    client.Connect();
+                    client.RunCommand("mkdir ~/.ssh");
+                    client.RunCommand("chmod -R 600 ~/.ssh");
+                    foreach (var myString in pubkey.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        client.RunCommand("printf '" + myString + @"'""""\n"""">>~/.ssh/authorized_keys");
+                    }
+                    client.Disconnect();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error connecting to " + dns + ": " + ex.Message.ToString());
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            doinstall();
         }
     }
 }
