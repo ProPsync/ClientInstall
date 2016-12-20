@@ -18,14 +18,7 @@ namespace CoreInstall
     {
         string config = "";
 
-        string dns = "";
-        string mediarepo = "";
-        string libraryrepo = "";
-        string prefrepo = "";
-
-        Boolean syncmedia = true;
-        Boolean synclibrary = true;
-        Boolean syncpref = true;
+        
         public Form1()
         {
             InitializeComponent();
@@ -89,11 +82,11 @@ namespace CoreInstall
                         checkBox3.Enabled = false;
                     }
 
-                    libraryrepo = SubstringExtensions.Between(config, "<libraryrepo>", @"</libraryrepo>");
-                    mediarepo = SubstringExtensions.Between(config, "<mediarepo>", @"</mediarepo>");
-                    prefrepo = SubstringExtensions.Between(config, "<prefrepo>", @"</prefrepo>");
+                    vars.libraryrepo = SubstringExtensions.Between(config, "<libraryrepo>", @"</libraryrepo>");
+                    vars.mediarepo = SubstringExtensions.Between(config, "<mediarepo>", @"</mediarepo>");
+                    vars.prefrepo = SubstringExtensions.Between(config, "<prefrepo>", @"</prefrepo>");
 
-                    dns = SubstringExtensions.Between(config, "<dns>", @"</dns>");
+                    vars.dns = SubstringExtensions.Between(config, "<dns>", @"</dns>");
 
                 }
             }catch (Exception ex)
@@ -104,10 +97,40 @@ namespace CoreInstall
            
         }
 
+
+
         private void doinstall()
         {
             //Check for and install git here
-
+            if ((Directory.Exists(@"C:\Program Files\Git")) || (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Git")))
+            {
+                MessageBox.Show("It looks like you already have Git installed.  Good for you!  Please note though that this sync program is heavily dependant on Git and other Unix tools being installed and accessible to the Windows command line; so if you didn't install it to our instructions in the documentation, you might want to go uninstall Git and reinstall it as specified in our documentation.  Once you are sure it's setup correctly, come back here and click OK.");
+            }else
+            {
+                MessageBox.Show("Git will now be downloaded and the installer will be launched.  Please check our documentation as to how you should install Git... we are heavily dependant on it being installed in a certain way - especially surrounding the extra Unix tools that it can install and what shell it executes from.");
+                if (Environment.Is64BitOperatingSystem)
+                {
+                    using (var client = new WebClient())
+                    {
+                        client.DownloadFile("https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.1/Git-2.11.0-64-bit.exe", Environment.CurrentDirectory + @"\GitSetup.exe");
+                        Process proc = new Process();
+                        proc.StartInfo.FileName = Environment.CurrentDirectory + @"\GitSetup.exe";
+                        proc.Start();
+                        proc.WaitForExit();
+                    }
+                }else
+                {
+                    using (var client = new WebClient())
+                    {
+                        client.DownloadFile("https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.1/Git-2.11.0-32-bit.exe", Environment.CurrentDirectory + @"\GitSetup.exe");
+                        Process proc = new Process();
+                        proc.StartInfo.FileName = Environment.CurrentDirectory + @"\GitSetup.exe";
+                        proc.Start();
+                        proc.WaitForExit();
+                    }
+                }
+            }
+            
             try
             {
                 Process cmd = new Process();
@@ -127,11 +150,11 @@ namespace CoreInstall
                 cmd.Start();
                 cmd.WaitForExit();
                 string pubkey = cmd.StandardOutput.ReadToEnd();
-                using (var client = new SshClient(dns, textBox2.Text, textBox3.Text))
+                using (var client = new SshClient(vars.dns, textBox2.Text, textBox3.Text))
                 {
                     client.Connect();
                     client.RunCommand("mkdir ~/.ssh");
-                    client.RunCommand("chmod -R 600 ~/.ssh");
+                    client.RunCommand("chmod -R 700 ~/.ssh");
                     foreach (var myString in pubkey.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
                     {
                         client.RunCommand("printf '" + myString + @"'""""\n"""">>~/.ssh/authorized_keys");
@@ -139,10 +162,55 @@ namespace CoreInstall
                     client.Disconnect();
                 }
 
+                cmd.StartInfo.Arguments = (@"/C git config --global user.name """"" + textBox4.Text + @"""");
+                cmd.Start();
+                cmd.WaitForExit();
+                cmd.StartInfo.Arguments = (@"/C git config --global user.email " + textBox5.Text);
+                cmd.Start();
+                cmd.WaitForExit();
+
+                if (System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Renewed Vision\ProPresenter 6"))
+                {
+                    dopp6install();
+                }else
+                {
+                    if (System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Renewed Vision\ProPresenter 5"))
+                    {
+                        dopp5install();
+                    }else
+                    {
+                        vars.version = "";
+                        versionchooser vc = new versionchooser();
+                        vc.Show();
+                        do
+                        {
+                            this.Enabled = false;
+                            System.Threading.Thread.Sleep(1000);
+                            Application.DoEvents();
+                        } while (vars.version == "");
+                        this.Enabled = true;
+                        if (vars.version == "6")
+                        {
+                            dopp6install();
+                        }else
+                        {
+                            if (vars.version == "5")
+                            {
+                                dopp5install();
+                            }
+                            else
+                            {
+                                MessageBox.Show("There seems to be a pretty big problem determining the version.  Please try installation again.");
+                                Application.Exit();
+                            }
+                        }
+                    }
+                }
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error connecting to " + dns + ": " + ex.Message.ToString());
+                MessageBox.Show("Error connecting to " + vars.dns + ": " + ex.Message.ToString());
             }
         }
 
@@ -150,7 +218,47 @@ namespace CoreInstall
         {
             doinstall();
         }
+
+        private void dopp6install()
+        {
+            vars.synclibrary = checkBox1.Checked;
+            vars.syncmedia = checkBox2.Checked;
+            vars.syncpref = checkBox3.Checked;
+            vars.username = textBox2.Text;
+            vars.fullname = textBox4.Text;
+            vars.email = textBox5.Text;
+            this.Visible = false;
+            pp6install pp6i = new pp6install();
+            pp6i.Show();
+        }
+        private void dopp5install()
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            vars.ignoredpreffiles = @"CrashReports/
+Log.txt
+LogCloudSyncApp.txt";
+        }
     }
+}
+public static class vars
+{
+    public static string version { get; set; }
+    public static Boolean syncmedia { get; set; }
+    public static Boolean synclibrary { get; set; }
+    public static Boolean syncpref { get; set; }
+
+    public static string fullname { get; set; }
+    public static string username { get; set; }
+    public static string email { get; set; }
+    public static string dns { get; set; }
+    public static string mediarepo { get; set; }
+    public static string libraryrepo { get; set; }
+    public static string prefrepo { get; set; }
+    public static string ignoredpreffiles { get; set; }
 }
 static class SubstringExtensions
 {
