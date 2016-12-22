@@ -134,7 +134,7 @@ namespace CoreInstall
                             client.RunCommand("chmod -R 700 ~/.ssh");
                             foreach (var myString in pubkey.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
                             {
-                                client.RunCommand("printf '" + myString + @"'""""\n"""">>~/.ssh/authorized_keys");
+                                client.RunCommand("echo '" + myString + @"' >> ~/.ssh/authorized_keys");
                             }
                             client.Disconnect();
                         }
