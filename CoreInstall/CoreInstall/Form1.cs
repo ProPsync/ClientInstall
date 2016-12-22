@@ -104,114 +104,108 @@ namespace CoreInstall
             //Check for and install git here
             if ((Directory.Exists(@"C:\Program Files\Git")) || (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Git")))
             {
-                MessageBox.Show("It looks like you already have Git installed.  Good for you!  Please note though that this sync program is heavily dependant on Git and other Unix tools being installed and accessible to the Windows command line; so if you didn't install it to our instructions in the documentation, you might want to go uninstall Git and reinstall it as specified in our documentation.  Once you are sure it's setup correctly, come back here and click OK.");
-            }else
-            {
-                MessageBox.Show("Git will now be downloaded and the installer will be launched.  Please check our documentation as to how you should install Git... we are heavily dependant on it being installed in a certain way - especially surrounding the extra Unix tools that it can install and what shell it executes from.");
-                if (Environment.Is64BitOperatingSystem)
+                try
                 {
-                    using (var client = new WebClient())
+                    Process cmd = new Process();
+                    cmd.StartInfo.FileName = Environment.SystemDirectory + @"\cmd.exe";
+                    cmd.StartInfo.Arguments = (@"/C mkdir %userprofile%\.ssh");
+                    cmd.Start();
+                    cmd.StartInfo.Arguments = (@"/C ssh-keygen -t rsa -b 4096 -C """ + textBox5.Text + @""" -f %userprofile%\.ssh\id_rsa -q -N """"");
+                    cmd.Start();
+                    cmd.WaitForExit();
+                    cmd.StartInfo.Arguments = (@"/C eval $(ssh-agent -s)");
+                    cmd.Start();
+                    cmd.WaitForExit();
+                    cmd.StartInfo.Arguments = (@"/C ssh-add %userprofile%\.ssh\id_rsa");
+                    cmd.Start();
+                    cmd.WaitForExit();
+                    cmd.StartInfo.Arguments = (@"/C cat %userprofile%\.ssh\id_rsa.pub");
+                    cmd.StartInfo.UseShellExecute = false;
+                    cmd.StartInfo.RedirectStandardOutput = true;
+                    cmd.Start();
+                    cmd.WaitForExit();
+                    string pubkey = cmd.StandardOutput.ReadToEnd();
+                    try
                     {
-                        client.DownloadFile("https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.1/Git-2.11.0-64-bit.exe", Environment.CurrentDirectory + @"\GitSetup.exe");
-                        Process proc = new Process();
-                        proc.StartInfo.FileName = Environment.CurrentDirectory + @"\GitSetup.exe";
-                        proc.Start();
-                        proc.WaitForExit();
-                    }
-                }else
-                {
-                    using (var client = new WebClient())
-                    {
-                        client.DownloadFile("https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.1/Git-2.11.0-32-bit.exe", Environment.CurrentDirectory + @"\GitSetup.exe");
-                        Process proc = new Process();
-                        proc.StartInfo.FileName = Environment.CurrentDirectory + @"\GitSetup.exe";
-                        proc.Start();
-                        proc.WaitForExit();
-                    }
-                }
-            }
-            
-            try
-            {
-                Process cmd = new Process();
-                cmd.StartInfo.FileName = Environment.SystemDirectory + @"\cmd.exe";
-                cmd.StartInfo.Arguments = (@"/C ssh-keygen -t rsa -b 4096 -C """ + textBox5.Text + @""" -f %userprofile%\.ssh\id_rsa -q -N """"");
-                cmd.Start();
-                cmd.WaitForExit();
-                cmd.StartInfo.Arguments = (@"/C eval $(ssh-agent -s)");
-                cmd.Start();
-                cmd.WaitForExit();
-                cmd.StartInfo.Arguments = (@"/C ssh-add %userprofile%\.ssh\id_rsa");
-                cmd.Start();
-                cmd.WaitForExit();
-                cmd.StartInfo.Arguments = (@"/C cat %userprofile%\.ssh\id_rsa.pub");
-                cmd.StartInfo.UseShellExecute = false;
-                cmd.StartInfo.RedirectStandardOutput = true;
-                cmd.Start();
-                cmd.WaitForExit();
-                string pubkey = cmd.StandardOutput.ReadToEnd();
-                using (var client = new SshClient(vars.dns, textBox2.Text, textBox3.Text))
-                {
-                    client.Connect();
-                    client.RunCommand("mkdir ~/.ssh");
-                    client.RunCommand("chmod -R 700 ~/.ssh");
-                    foreach (var myString in pubkey.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        client.RunCommand("printf '" + myString + @"'""""\n"""">>~/.ssh/authorized_keys");
-                    }
-                    client.Disconnect();
-                }
-
-                cmd.StartInfo.Arguments = (@"/C git config --global user.name """"" + textBox4.Text + @"""");
-                cmd.Start();
-                cmd.WaitForExit();
-                cmd.StartInfo.Arguments = (@"/C git config --global user.email " + textBox5.Text);
-                cmd.Start();
-                cmd.WaitForExit();
-
-                if (System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Renewed Vision\ProPresenter 6"))
-                {
-                    dopp6install();
-                }else
-                {
-                    if (System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Renewed Vision\ProPresenter 5"))
-                    {
-                        dopp5install();
-                    }else
-                    {
-                        vars.version = "";
-                        versionchooser vc = new versionchooser();
-                        vc.Show();
-                        do
+                        using (var client = new SshClient(vars.dns, textBox2.Text, textBox3.Text))
                         {
-                            this.Enabled = false;
-                            System.Threading.Thread.Sleep(1000);
-                            Application.DoEvents();
-                        } while (vars.version == "");
-                        this.Enabled = true;
-                        if (vars.version == "6")
-                        {
-                            dopp6install();
-                        }else
-                        {
-                            if (vars.version == "5")
+                            client.Connect();
+                            client.RunCommand("mkdir ~/.ssh");
+                            client.RunCommand("chmod -R 700 ~/.ssh");
+                            foreach (var myString in pubkey.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
                             {
-                                dopp5install();
+                                client.RunCommand("printf '" + myString + @"'""""\n"""">>~/.ssh/authorized_keys");
+                            }
+                            client.Disconnect();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error connecting to server: " + ex.Message.ToString());
+                        Application.Exit();
+                    }
+
+
+                    cmd.StartInfo.Arguments = (@"/C git config --global user.name """"" + textBox4.Text + @"""");
+                    cmd.Start();
+                    cmd.WaitForExit();
+                    cmd.StartInfo.Arguments = (@"/C git config --global user.email " + textBox5.Text);
+                    cmd.Start();
+                    cmd.WaitForExit();
+
+                    if (System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Renewed Vision\ProPresenter 6"))
+                    {
+                        dopp6install();
+                    }
+                    else
+                    {
+                        if (System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Renewed Vision\ProPresenter 5"))
+                        {
+                            dopp5install();
+                        }
+                        else
+                        {
+                            vars.version = "";
+                            versionchooser vc = new versionchooser();
+                            vc.Show();
+                            do
+                            {
+                                this.Enabled = false;
+                                System.Threading.Thread.Sleep(1000);
+                                Application.DoEvents();
+                            } while (vars.version == "");
+                            this.Enabled = true;
+                            if (vars.version == "6")
+                            {
+                                dopp6install();
                             }
                             else
                             {
-                                MessageBox.Show("There seems to be a pretty big problem determining the version.  Please try installation again.");
-                                Application.Exit();
+                                if (vars.version == "5")
+                                {
+                                    dopp5install();
+                                }
+                                else
+                                {
+                                    MessageBox.Show("There seems to be a pretty big problem determining the version.  Please try installation again.");
+                                    Application.Exit();
+                                }
                             }
                         }
                     }
-                }
 
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error connecting to " + vars.dns + ": " + ex.Message.ToString());
+                }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Error connecting to " + vars.dns + ": " + ex.Message.ToString());
+                installgit();
             }
+            
+           
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -238,9 +232,44 @@ namespace CoreInstall
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            vars.ignoredpreffiles = @"CrashReports/
+            if (!((Directory.Exists(@"C:\Program Files\Git")) || (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Git"))))
+            {
+                installgit();
+            }
+
+
+
+
+
+                vars.ignoredpreffiles = @"CrashReports/
 Log.txt
 LogCloudSyncApp.txt";
+        }
+
+        private void installgit()
+        {
+            MessageBox.Show("Git will now be downloaded and the installer will be launched.  It might take just a few minutes for the download.  Once it is installed, please restart this setup.  Please check our documentation as to how you should install Git... we are heavily dependant on it being installed in a certain way - especially surrounding the extra Unix tools that it can install and what shell it executes from.");
+            if (Environment.Is64BitOperatingSystem)
+            {
+                using (var client = new WebClient())
+                {
+                    client.DownloadFile("https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.1/Git-2.11.0-64-bit.exe", Environment.CurrentDirectory + @"\GitSetup.exe");
+                    Process proc = new Process();
+                    proc.StartInfo.FileName = Environment.CurrentDirectory + @"\GitSetup.exe";
+                    proc.Start();
+                }
+            }
+            else
+            {
+                using (var client = new WebClient())
+                {
+                    client.DownloadFile("https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.1/Git-2.11.0-32-bit.exe", Environment.CurrentDirectory + @"\GitSetup.exe");
+                    Process proc = new Process();
+                    proc.StartInfo.FileName = Environment.CurrentDirectory + @"\GitSetup.exe";
+                    proc.Start();
+                }
+            }
+            Application.Exit();
         }
     }
 }

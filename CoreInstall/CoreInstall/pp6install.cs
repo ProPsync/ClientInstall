@@ -122,7 +122,7 @@ namespace CoreInstall
                     cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + " & git add --all");
                     cmd.Start();
                     cmd.WaitForExit();
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + @" & git commit -m """"Initial library commit for " + vars.fullname + @" on " + Environment.MachineName + @"""");
+                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + @" & git commit -m ""Initial library commit for " + vars.fullname + @" on " + Environment.MachineName + @"""");
                     cmd.Start();
                     cmd.WaitForExit();
                     cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + @" & git push origin master");
@@ -137,9 +137,9 @@ namespace CoreInstall
                         DirectoryInfo dirinfo = new DirectoryInfo(textBox2.Text);
                         DirectoryCopy(textBox2.Text, backuplocation + dirinfo.Name, true);
 
-                        System.IO.Directory.Delete(textBox1.Text, true);
+                        System.IO.Directory.Delete(textBox2.Text, true);
 
-                        Directory.CreateDirectory(textBox1.Text);
+                        Directory.CreateDirectory(textBox2.Text);
 
                         Process cmd = new Process();
                         cmd.StartInfo.FileName = Environment.SystemDirectory + @"\cmd.exe";
@@ -156,7 +156,7 @@ namespace CoreInstall
                     cmd.StartInfo.Arguments = (@"/C cd /d " + textBox2.Text + " & git add --all");
                     cmd.Start();
                     cmd.WaitForExit();
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox2.Text + @" & git commit -m """"Initial media commit for " + vars.fullname + @" on " + Environment.MachineName + @"""");
+                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox2.Text + @" & git commit -m ""Initial media commit for " + vars.fullname + @" on " + Environment.MachineName + @"""");
                     cmd.Start();
                     cmd.WaitForExit();
                     cmd.StartInfo.Arguments = (@"/C cd /d " + textBox2.Text + @" & git push origin master");
@@ -191,7 +191,7 @@ namespace CoreInstall
                     cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + " & git add --all");
                     cmd.Start();
                     cmd.WaitForExit();
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + @" & git commit -m """"Initial preference commit for " + vars.fullname + @" on " + Environment.MachineName + @"""");
+                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + @" & git commit -m ""Initial preference commit for " + vars.fullname + @" on " + Environment.MachineName + @"""");
                     cmd.Start();
                     cmd.WaitForExit();
                     cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + @" & git push origin master");
@@ -199,6 +199,7 @@ namespace CoreInstall
                     cmd.WaitForExit();
                 }
             }
+            MessageBox.Show("Completed!");
         }
 
         private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
