@@ -146,7 +146,7 @@ namespace CoreInstall
                     }
 
 
-                    cmd.StartInfo.Arguments = (@"/C git config --global user.name """"" + textBox4.Text + @"""");
+                    cmd.StartInfo.Arguments = (@"/C git config --global user.name """ + textBox4.Text + @"""");
                     cmd.Start();
                     cmd.WaitForExit();
                     cmd.StartInfo.Arguments = (@"/C git config --global user.email " + textBox5.Text);
