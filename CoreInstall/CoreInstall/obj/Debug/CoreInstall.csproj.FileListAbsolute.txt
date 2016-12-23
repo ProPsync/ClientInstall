@@ -11,3 +11,15 @@ C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInsta
 C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.exe
 C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.pdb
 C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.csprojResolveAssemblyReference.cache
+C:\Users\Brian\Source\Repos\ProPresenter Sync\ClientInstall\CoreInstall\CoreInstall\bin\Debug\CoreInstall.exe.config
+C:\Users\Brian\Source\Repos\ProPresenter Sync\ClientInstall\CoreInstall\CoreInstall\bin\Debug\CoreInstall.exe
+C:\Users\Brian\Source\Repos\ProPresenter Sync\ClientInstall\CoreInstall\CoreInstall\bin\Debug\CoreInstall.pdb
+C:\Users\Brian\Source\Repos\ProPresenter Sync\ClientInstall\CoreInstall\CoreInstall\bin\Debug\Renci.SshNet.dll
+C:\Users\Brian\Source\Repos\ProPresenter Sync\ClientInstall\CoreInstall\CoreInstall\bin\Debug\Renci.SshNet.xml
+C:\Users\Brian\Source\Repos\ProPresenter Sync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.Form1.resources
+C:\Users\Brian\Source\Repos\ProPresenter Sync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.pp6install.resources
+C:\Users\Brian\Source\Repos\ProPresenter Sync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.Properties.Resources.resources
+C:\Users\Brian\Source\Repos\ProPresenter Sync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.versionchooser.resources
+C:\Users\Brian\Source\Repos\ProPresenter Sync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.csproj.GenerateResource.Cache
+C:\Users\Brian\Source\Repos\ProPresenter Sync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.exe
+C:\Users\Brian\Source\Repos\ProPresenter Sync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.pdb
