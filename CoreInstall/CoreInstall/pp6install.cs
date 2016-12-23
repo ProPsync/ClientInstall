@@ -226,6 +226,9 @@ namespace CoreInstall
             key.SetValue("syncpref", vars.syncpref);
             key.SetValue("pro-ver", "6");
             key.SetValue("username", vars.username);
+            key.SetValue("libpath", textBox1.Text);
+            key.SetValue("mediapath", textBox2.Text);
+            key.SetValue("prefpath", textBox3.Text);
 
             key.Close();
 
