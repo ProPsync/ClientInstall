@@ -235,8 +235,9 @@ namespace CoreInstall
             key.SetValue("prefpath", textBox3.Text);
 
             key.Close();
-
-            MessageBox.Show("Completed!");
+            this.Visible = false;
+            MessageBox.Show("Installation Completed!");
+            Application.Exit();
         }
 
         private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
