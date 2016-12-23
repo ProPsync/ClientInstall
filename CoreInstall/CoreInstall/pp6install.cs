@@ -200,7 +200,7 @@ namespace CoreInstall
                 }
             }
 
-            Microsoft.Win32.RegistryKey key;
+            
             try
             {
                 Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE", true).CreateSubKey("Semrau Software Consulting");
@@ -217,6 +217,9 @@ namespace CoreInstall
                 Console.Write("Error: couldn't create reg key: " + ex.Message.ToString());
             }
 
+
+            Microsoft.Win32.RegistryKey key;
+
             key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE").OpenSubKey("Semrau Software Consulting").OpenSubKey("ProPsync", true);
             key.SetValue("dns", vars.dns);
             key.SetValue("mediarepo", vars.mediarepo);
@@ -226,6 +229,7 @@ namespace CoreInstall
             key.SetValue("syncpref", vars.syncpref);
             key.SetValue("pro-ver", "6");
             key.SetValue("username", vars.username);
+            key.SetValue("fullname", vars.fullname);
             key.SetValue("libpath", textBox1.Text);
             key.SetValue("mediapath", textBox2.Text);
             key.SetValue("prefpath", textBox3.Text);
