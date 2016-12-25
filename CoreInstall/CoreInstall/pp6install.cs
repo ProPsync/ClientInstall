@@ -225,6 +225,7 @@ namespace CoreInstall
             key.SetValue("mediarepo", vars.mediarepo);
             key.SetValue("libraryrepo", vars.libraryrepo);
             key.SetValue("prefrepo", vars.prefrepo);
+            key.SetValue("synclib", vars.synclibrary);
             key.SetValue("syncmedia", vars.syncmedia);
             key.SetValue("syncpref", vars.syncpref);
             key.SetValue("pro-ver", "6");
@@ -233,6 +234,7 @@ namespace CoreInstall
             key.SetValue("libpath", textBox1.Text);
             key.SetValue("mediapath", textBox2.Text);
             key.SetValue("prefpath", textBox3.Text);
+            key.SetValue("mode", "auto");
 
             key.Close();
             this.Visible = false;
