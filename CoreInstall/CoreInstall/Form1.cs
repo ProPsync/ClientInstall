@@ -18,7 +18,8 @@ namespace CoreInstall
     {
         string config = "";
 
-        
+        splash sph = new splash();
+        eula ela = new eula();
         public Form1()
         {
             InitializeComponent();
@@ -80,6 +81,15 @@ namespace CoreInstall
                     {
                         checkBox3.Checked = false;
                         checkBox3.Enabled = false;
+                    }
+                    if (Boolean.Parse(SubstringExtensions.Between(config, "<automode>", @"</automode>")))
+                    {
+                        checkBox4.Checked = true;
+                    }
+                    else
+                    {
+                        checkBox4.Checked = false;
+                        checkBox4.Enabled = false;
                     }
 
                     vars.libraryrepo = SubstringExtensions.Between(config, "<libraryrepo>", @"</libraryrepo>");
@@ -153,6 +163,46 @@ namespace CoreInstall
                     cmd.Start();
                     cmd.WaitForExit();
 
+                    try
+                    {
+                        if (!(System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Semrau Software Consulting\ProPsync\")))
+                        {
+                            if (!(Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Semrau Software Consulting\")))
+                            {
+                                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Semrau Software Consulting");
+                            }
+                            Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Semrau Software Consulting\ProPsync\");
+                        }
+
+                        using (var client = new WebClient())
+                        {
+                            client.DownloadFile("https://downloads.semrauconsulting.com/propsync/ProPsync-CoreGUI.exe", Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Semrau Software Consulting\ProPsync\ProPsync-CoreGUI.exe");
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show("Error installing core GUI.  Please download it and install it in a location of your choice." + Environment.NewLine + Environment.NewLine + ex.Message.ToString());
+                    }
+
+                    try
+                    {
+                        string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                        using (StreamWriter writer = new StreamWriter(deskDir + @"\ProPsync.url"))
+                        {
+                            string app = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Semrau Software Consulting\ProPsync\ProPsync-CoreGUI.exe";
+                            writer.WriteLine("[InternetShortcut]");
+                            writer.WriteLine("URL=file:///" + app);
+                            writer.WriteLine("IconIndex=0");
+                            string icon = app.Replace('\\', '/');
+                            writer.WriteLine("IconFile=" + icon);
+                            writer.Flush();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error creating shortcut on desktop.  Application can be executed from " + Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Semrau Software Consulting\ProPsync\ProPsync-CoreGUI.exe" + @"." + Environment.NewLine + Environment.NewLine + ex.Message.ToString());
+                    }
+
                     if (System.IO.Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Renewed Vision\ProPresenter 6"))
                     {
                         dopp6install();
@@ -218,6 +268,7 @@ namespace CoreInstall
             vars.synclibrary = checkBox1.Checked;
             vars.syncmedia = checkBox2.Checked;
             vars.syncpref = checkBox3.Checked;
+            vars.automode = checkBox4.Checked;
             vars.username = textBox2.Text;
             vars.fullname = textBox4.Text;
             vars.email = textBox5.Text;
@@ -245,6 +296,8 @@ namespace CoreInstall
 Log.txt
 LogCloudSyncApp.txt";
         }
+
+
 
         private void installgit()
         {
@@ -279,6 +332,7 @@ public static class vars
     public static Boolean syncmedia { get; set; }
     public static Boolean synclibrary { get; set; }
     public static Boolean syncpref { get; set; }
+    public static Boolean automode { get; set; }
 
     public static string fullname { get; set; }
     public static string username { get; set; }
@@ -288,6 +342,7 @@ public static class vars
     public static string libraryrepo { get; set; }
     public static string prefrepo { get; set; }
     public static string ignoredpreffiles { get; set; }
+    public static Boolean agreeeula { get; set; }
 }
 static class SubstringExtensions
 {

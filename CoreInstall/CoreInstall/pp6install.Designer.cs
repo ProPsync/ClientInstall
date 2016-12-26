@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(pp6install));
             this.library = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -176,6 +177,7 @@
             this.Controls.Add(this.prefs);
             this.Controls.Add(this.media);
             this.Controls.Add(this.library);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "pp6install";
             this.Text = "Installing for ProPresenter 6";
             this.Load += new System.EventHandler(this.pp6install_Load);

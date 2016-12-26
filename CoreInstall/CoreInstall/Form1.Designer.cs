@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -75,6 +77,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.checkBox4);
             this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.textBox5);
             this.panel1.Controls.Add(this.label5);
@@ -92,6 +95,16 @@
             this.panel1.Size = new System.Drawing.Size(508, 235);
             this.panel1.TabIndex = 3;
             this.panel1.Visible = false;
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(333, 3);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(77, 17);
+            this.checkBox4.TabIndex = 12;
+            this.checkBox4.Text = "Auto mode";
+            this.checkBox4.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
@@ -207,6 +220,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "ProPsync";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -235,6 +249,7 @@
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox checkBox4;
     }
 }
 
