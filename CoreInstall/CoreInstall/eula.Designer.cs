@@ -74,6 +74,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "eula";
             this.Text = "eula";
+            this.Load += new System.EventHandler(this.eula_Load);
             this.ResumeLayout(false);
 
         }

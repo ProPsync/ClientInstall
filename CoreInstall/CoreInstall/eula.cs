@@ -20,12 +20,18 @@ namespace CoreInstall
         private void button1_Click(object sender, EventArgs e)
         {
             vars.agreeeula = true;
+            
             this.Close();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void eula_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

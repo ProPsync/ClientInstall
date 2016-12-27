@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.IO;
 using Renci.SshNet;
 using System.Diagnostics;
+using System.Timers;
 
 namespace CoreInstall
 {
@@ -19,90 +20,123 @@ namespace CoreInstall
         string config = "";
 
         splash sph = new splash();
-        eula ela = new eula();
+       
         public Form1()
         {
             InitializeComponent();
         }
-
+        private void eulachecker()
+        {
+            Boolean running = true;
+            do
+            {
+                if (vars.agreeeula == true)
+                {
+                    if (checkBox5.InvokeRequired)
+                    {
+                        checkBox5.BeginInvoke((MethodInvoker)delegate ()
+                        {
+                            this.checkBox5.Checked = true;
+                        });
+                    }else
+                    {
+                        this.checkBox5.Checked = true;
+                    }
+                    
+                    running = false;
+                }else
+                {
+                    System.Threading.Thread.Sleep(200);
+                }
+            } while (running == true);
+        }
         private void button1_Click(object sender, EventArgs e)
         {
-            try
+            if (vars.agreeeula == true)
             {
-                if (textBox1.Text.StartsWith(@"http://"))
+                try
                 {
-                    textBox1.Text = textBox1.Text.Replace(@"http://", "");
-                }
-                if (textBox1.Text.StartsWith(@"https://"))
-                {
-                    textBox1.Text = textBox1.Text.Replace(@"https://", "");
-                }
-                if (textBox1.Text.StartsWith(@"ssh://"))
-                {
-                    textBox1.Text = textBox1.Text.Replace(@"ssh://", "");
-                }
-                if (textBox1.Text.StartsWith(@"www"))
-                {
-                    textBox1.Text = textBox1.Text.Replace(@"www", "");
-                }
-                WebRequest req = WebRequest.Create(@"http://" + textBox1.Text + @"/config.txt");
-                WebResponse response = req.GetResponse();
-                Stream stream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(stream);
-                config = reader.ReadToEnd();
-                if (!(config == ""))
-                {
-                    panel1.Visible = true;
-                    button1.Enabled = false;
-                    textBox1.Enabled = false;
+                    if (textBox1.Text.StartsWith(@"http://"))
+                    {
+                        textBox1.Text = textBox1.Text.Replace(@"http://", "");
+                    }
+                    if (textBox1.Text.StartsWith(@"https://"))
+                    {
+                        textBox1.Text = textBox1.Text.Replace(@"https://", "");
+                    }
+                    if (textBox1.Text.StartsWith(@"ssh://"))
+                    {
+                        textBox1.Text = textBox1.Text.Replace(@"ssh://", "");
+                    }
+                    if (textBox1.Text.StartsWith(@"www"))
+                    {
+                        textBox1.Text = textBox1.Text.Replace(@"www", "");
+                    }
+                    WebRequest req = WebRequest.Create(@"http://" + textBox1.Text + @"/config.txt");
+                    WebResponse response = req.GetResponse();
+                    Stream stream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(stream);
+                    config = reader.ReadToEnd();
+                    if (!(config == ""))
+                    {
+                        panel1.Visible = true;
+                        button1.Enabled = false;
+                        textBox1.Enabled = false;
 
-                    if (Boolean.Parse(SubstringExtensions.Between(config, "<synclibrary>", @"</synclibrary>")))
-                    {
-                        checkBox1.Checked = true;
-                    } else
-                    {
-                        checkBox1.Checked = false;
-                        checkBox1.Enabled = false;
-                    }
-                    if (Boolean.Parse(SubstringExtensions.Between(config, "<syncmedia>", @"</syncmedia>")))
-                    {
-                        checkBox2.Checked = true;
-                    }
-                    else
-                    {
-                        checkBox2.Checked = false;
-                        checkBox2.Enabled = false;
-                    }
-                    if (Boolean.Parse(SubstringExtensions.Between(config, "<syncpref>", @"</syncpref>")))
-                    {
-                        checkBox3.Checked = true;
-                    }
-                    else
-                    {
-                        checkBox3.Checked = false;
-                        checkBox3.Enabled = false;
-                    }
-                    if (Boolean.Parse(SubstringExtensions.Between(config, "<automode>", @"</automode>")))
-                    {
-                        checkBox4.Checked = true;
-                    }
-                    else
-                    {
-                        checkBox4.Checked = false;
-                        checkBox4.Enabled = false;
-                    }
+                        if (Boolean.Parse(SubstringExtensions.Between(config, "<synclibrary>", @"</synclibrary>")))
+                        {
+                            checkBox1.Checked = true;
+                        }
+                        else
+                        {
+                            checkBox1.Checked = false;
+                            checkBox1.Enabled = false;
+                        }
+                        if (Boolean.Parse(SubstringExtensions.Between(config, "<syncmedia>", @"</syncmedia>")))
+                        {
+                            checkBox2.Checked = true;
+                        }
+                        else
+                        {
+                            checkBox2.Checked = false;
+                            checkBox2.Enabled = false;
+                        }
+                        if (Boolean.Parse(SubstringExtensions.Between(config, "<syncpref>", @"</syncpref>")))
+                        {
+                            checkBox3.Checked = true;
+                        }
+                        else
+                        {
+                            checkBox3.Checked = false;
+                            checkBox3.Enabled = false;
+                        }
+                        if (Boolean.Parse(SubstringExtensions.Between(config, "<automode>", @"</automode>")))
+                        {
+                            checkBox4.Checked = true;
+                        }
+                        else
+                        {
+                            checkBox4.Checked = false;
+                            checkBox4.Enabled = false;
+                        }
 
-                    vars.libraryrepo = SubstringExtensions.Between(config, "<libraryrepo>", @"</libraryrepo>");
-                    vars.mediarepo = SubstringExtensions.Between(config, "<mediarepo>", @"</mediarepo>");
-                    vars.prefrepo = SubstringExtensions.Between(config, "<prefrepo>", @"</prefrepo>");
+                        vars.libraryrepo = SubstringExtensions.Between(config, "<libraryrepo>", @"</libraryrepo>");
+                        vars.mediarepo = SubstringExtensions.Between(config, "<mediarepo>", @"</mediarepo>");
+                        vars.prefrepo = SubstringExtensions.Between(config, "<prefrepo>", @"</prefrepo>");
 
-                    vars.dns = SubstringExtensions.Between(config, "<dns>", @"</dns>");
+                        vars.dns = SubstringExtensions.Between(config, "<dns>", @"</dns>");
 
+                    }
                 }
-            }catch (Exception ex)
+                catch (Exception ex)
+                {
+                    MessageBox.Show("There was an error connecting to the server.  Please check the URL and your connection and try again.  Technical details: " + Environment.NewLine + ex.Message.ToString());
+                }
+            }else
             {
-                MessageBox.Show("There was an error connecting to the server.  Please check the URL and your connection and try again.  Technical details: " + Environment.NewLine + ex.Message.ToString());
+                MessageBox.Show("Please agree to the EULA first.");
             }
+            
 
            
         }
@@ -286,6 +320,16 @@ namespace CoreInstall
             if (!((Directory.Exists(@"C:\Program Files\Git")) || (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Git"))))
             {
                 installgit();
+            }else
+            {
+                vars.agreeeula = false;
+                showsplash();
+                System.Timers.Timer t = new System.Timers.Timer();
+                t.Interval = 3000;
+                t.AutoReset = true;
+                t.Elapsed += new ElapsedEventHandler(closesplash);
+                t.Start();
+
             }
 
 
@@ -297,6 +341,24 @@ Log.txt
 LogCloudSyncApp.txt";
         }
 
+
+        private void showsplash()
+        {
+            this.Visible = false;
+            this.Enabled = false;
+            this.Opacity = 0;
+            sph.Show();
+            
+            //System.Threading.Thread.Sleep(3000);
+            //sph.Close();
+        }
+        private void closesplash(object sender, ElapsedEventArgs e)
+        {
+            sph.Close();
+            this.Enabled = true;
+            this.Visible = true;
+            this.Opacity = 100;
+        }
 
 
         private void installgit()
@@ -323,6 +385,25 @@ LogCloudSyncApp.txt";
                 }
             }
             Application.Exit();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            eula ela = new eula();
+            ela.Show();
+            System.Threading.Thread trd = new System.Threading.Thread(eulachecker);
+            trd.Start();
+        }
+
+        private void checkBox5_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox5.Checked == true)
+            {
+                vars.agreeeula = true;
+            }else
+            {
+                vars.agreeeula = false;
+            }
         }
     }
 }
