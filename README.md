@@ -6,6 +6,7 @@ ProPsync will need git installed.  On Windows, it will also need a number of Uni
 
 ## Git installation:
 If the client setup is run before Git is installed, it will download and run the Git installer for you.  Please follow these setup directions closely and if you already have git insatlled, consider reinstalling with these directions:
+
 1\.  Agree to the EULA.  Keep in mind that Git is distrubuted under the GNUv2 license, whereas ProPsync is distributed under the MIT license.
 
 ![](https://downloads.semrauconsulting.com/propsync/readme-images/gitinstall/1-EULA.png "Git EULA")
