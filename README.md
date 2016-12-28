@@ -53,24 +53,25 @@ Be sure to extract the entire zip folder before running the "CoreInstall.exe" pr
 
 1\.  Wait for the splash screen to disappear, then agree to the EULA and enter your server address.
 
-
-
+![Enter server URL and agree to the EULA](https://downloads.semrauconsulting.com/propsync/readme-images/cliinstall/1-Server_and_EULA.png "Server and EULA example")
 
 2\.  Click "Get Configuration", then enter your username and password that you setup during the server installation.  Full name and email address are also required for commit tracking and for Git configuration.  We highly recommending entering a identifying name for the person or group who will be using ProPresenter on this computer as it will come in handy if you ever need to revert to a previous version of a file.
 
   - You can also choose what repositories you want to sync as well as whether or not the program should use "Auto mode".
   - In "Auto mode", the program assumes you will start it instead of ProPresenter and you will let it open ProPresenter for you.  When it opens, it will do an initial sync, open ProPresenter, wait for ProPresenter to close, then sync again.  This is useful on machines that aren't presenting, but it is not advisable to use a method like this on mission critical presentation computers.  When it is not using "Auto mode", you will manually start the program and use the sync button to start a sync.  It would be advisible to do a sync before and after you open ProPresenter - and not using it while ProPresenter is open.
   
-  
+![Enter user information and select options](https://downloads.semrauconsulting.com/propsync/readme-images/cliinstall/2-Initial_settings.png "User settings example")
   
 3\.  Once you start the installation, a window will pop up asking you to confirm the paths of each ProPresenter folder.  These paths will auto-fill if the default paths exist, but you should probably verify these paths by opening ProPresenter and looking at the paths listed in the preferences.  Once you have verified the paths, click "Confirm".
 
-
+![Confirm paths](https://downloads.semrauconsulting.com/propsync/readme-images/cliinstall/3-confirm_paths.png "Path confirmation example")
 
 4\.  A command window will probably pop up asking you to confirm the authenticity of your server.  Type yes and press enter.
 
   - A number of command windows will pop up as the initial sync occurs.  *If you are prompted by a password on any of these windows*, forcibly end the installation from Task Manager and start over, because something happened and the SSH authentication mechanism did not get setup properly.  You could simply enter the password for your user that you specified in our installation window; however, you would need to do that each time you ran a sync for each folder that gets synced.  You do not want to do that... it gets old really fast.
 
-  
+![Confirm authenticity of server](https://downloads.semrauconsulting.com/propsync/readme-images/cliinstall/4-confirm_ssh_fingerprint.png "SSL Fingerprint example")
   
 5\.  Once the installation has completed, you should see a message box stating so and you should see a shortcut on the desktop for "ProPsync"
+
+![Installation completed](https://downloads.semrauconsulting.com/propsync/readme-images/cliinstall/5-install_complete.png "Installation completed example")
