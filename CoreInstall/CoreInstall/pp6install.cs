@@ -82,58 +82,62 @@ namespace CoreInstall
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if (!(System.IO.Directory.Exists(@"C:\ProgramData\Semrau Software Consulting\ProPsync\")))
+            try
             {
-                System.IO.Directory.CreateDirectory(@"C:\ProgramData\Semrau Software Consulting\ProPsync\");
-            }
-
-            
-            string backuplocation;
-            backuplocation = @"C:\ProgramData\Semrau Software Consulting\ProPsync\" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "---" + DateTime.Now.Hour + "-" + DateTime.Now.Minute;
-            do
-            {
-                backuplocation = @"C:\ProgramData\Semrau Software Consulting\ProPsync\" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "---" + DateTime.Now.Hour + "-" + DateTime.Now.Minute;
-            } while (System.IO.Directory.Exists(backuplocation));
-
-            
-
-            if (vars.synclibrary == true)
-            {
-                if ((!(textBox1.Text == "")) && (System.IO.Directory.Exists(textBox1.Text))) {
-                    DirectoryInfo dirinfo = new DirectoryInfo(textBox1.Text);
-                    DirectoryCopy(textBox1.Text, backuplocation + dirinfo.Name, true);
-
-                    System.IO.Directory.Delete(textBox1.Text, true);
-
-                    Directory.CreateDirectory(textBox1.Text);
-
-                    Process cmd = new Process();
-                    cmd.StartInfo.FileName = Environment.SystemDirectory + @"\cmd.exe";
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + " & git init");
-                    cmd.Start();
-                    cmd.WaitForExit();
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + " & git remote add origin ssh://" + vars.username + @"@" + vars.dns + vars.libraryrepo);
-                    cmd.Start();
-                    cmd.WaitForExit();
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + " & git pull origin master");
-                    cmd.Start();
-                    cmd.WaitForExit();
-                    DirectoryCopy(backuplocation + dirinfo.Name, textBox1.Text, true);
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + " & git add --all");
-                    cmd.Start();
-                    cmd.WaitForExit();
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + @" & git commit -m ""Initial library commit for " + vars.fullname + @" on " + Environment.MachineName + @"""");
-                    cmd.Start();
-                    cmd.WaitForExit();
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + @" & git push origin master");
-                    cmd.Start();
-                    cmd.WaitForExit();
-                }
-            }
-            if (vars.syncmedia == true)
-            {
-                if ((!(textBox2.Text == "")) && (System.IO.Directory.Exists(textBox2.Text)))
+                this.Enabled = false;
+                if (!(System.IO.Directory.Exists(@"C:\ProgramData\Semrau Software Consulting\ProPsync\")))
                 {
+                    System.IO.Directory.CreateDirectory(@"C:\ProgramData\Semrau Software Consulting\ProPsync\");
+                }
+
+
+                string backuplocation;
+                backuplocation = @"C:\ProgramData\Semrau Software Consulting\ProPsync\" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "---" + DateTime.Now.Hour + "-" + DateTime.Now.Minute;
+                do
+                {
+                    backuplocation = @"C:\ProgramData\Semrau Software Consulting\ProPsync\" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "---" + DateTime.Now.Hour + "-" + DateTime.Now.Minute;
+                } while (System.IO.Directory.Exists(backuplocation));
+
+
+
+                if (vars.synclibrary == true)
+                {
+                    if ((!(textBox1.Text == "")) && (System.IO.Directory.Exists(textBox1.Text)))
+                    {
+                        DirectoryInfo dirinfo = new DirectoryInfo(textBox1.Text);
+                        DirectoryCopy(textBox1.Text, backuplocation + dirinfo.Name, true);
+
+                        System.IO.Directory.Delete(textBox1.Text, true);
+
+                        Directory.CreateDirectory(textBox1.Text);
+
+                        Process cmd = new Process();
+                        cmd.StartInfo.FileName = Environment.SystemDirectory + @"\cmd.exe";
+                        cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + " & git init");
+                        cmd.Start();
+                        cmd.WaitForExit();
+                        cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + " & git remote add origin ssh://" + vars.username + @"@" + vars.dns + vars.libraryrepo);
+                        cmd.Start();
+                        cmd.WaitForExit();
+                        cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + " & git pull origin master");
+                        cmd.Start();
+                        cmd.WaitForExit();
+                        DirectoryCopy(backuplocation + dirinfo.Name, textBox1.Text, true);
+                        cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + " & git add --all");
+                        cmd.Start();
+                        cmd.WaitForExit();
+                        cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + @" & git commit -m ""Initial library commit for " + vars.fullname + @" on " + Environment.MachineName + @"""");
+                        cmd.Start();
+                        cmd.WaitForExit();
+                        cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + @" & git push origin master");
+                        cmd.Start();
+                        cmd.WaitForExit();
+                    }
+                }
+                if (vars.syncmedia == true)
+                {
+                    if ((!(textBox2.Text == "")) && (System.IO.Directory.Exists(textBox2.Text)))
+                    {
                         DirectoryInfo dirinfo = new DirectoryInfo(textBox2.Text);
                         DirectoryCopy(textBox2.Text, backuplocation + dirinfo.Name, true);
 
@@ -153,93 +157,100 @@ namespace CoreInstall
                         cmd.Start();
                         cmd.WaitForExit();
                         DirectoryCopy(backuplocation + dirinfo.Name, textBox2.Text, true);
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox2.Text + " & git add --all");
-                    cmd.Start();
-                    cmd.WaitForExit();
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox2.Text + @" & git commit -m ""Initial media commit for " + vars.fullname + @" on " + Environment.MachineName + @"""");
-                    cmd.Start();
-                    cmd.WaitForExit();
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox2.Text + @" & git push origin master");
-                    cmd.Start();
-                    cmd.WaitForExit();
+                        cmd.StartInfo.Arguments = (@"/C cd /d " + textBox2.Text + " & git add --all");
+                        cmd.Start();
+                        cmd.WaitForExit();
+                        cmd.StartInfo.Arguments = (@"/C cd /d " + textBox2.Text + @" & git commit -m ""Initial media commit for " + vars.fullname + @" on " + Environment.MachineName + @"""");
+                        cmd.Start();
+                        cmd.WaitForExit();
+                        cmd.StartInfo.Arguments = (@"/C cd /d " + textBox2.Text + @" & git push origin master");
+                        cmd.Start();
+                        cmd.WaitForExit();
+                    }
                 }
-            }
-            if (vars.syncpref == true)
-            {
-                if ((!(textBox3.Text == "")) && (System.IO.Directory.Exists(textBox3.Text)))
+                if (vars.syncpref == true)
                 {
-                    DirectoryInfo dirinfo = new DirectoryInfo(textBox3.Text);
-                    DirectoryCopy(textBox3.Text, backuplocation + dirinfo.Name, true);
+                    if ((!(textBox3.Text == "")) && (System.IO.Directory.Exists(textBox3.Text)))
+                    {
+                        DirectoryInfo dirinfo = new DirectoryInfo(textBox3.Text);
+                        DirectoryCopy(textBox3.Text, backuplocation + dirinfo.Name, true);
 
-                    System.IO.Directory.Delete(textBox3.Text, true);
+                        System.IO.Directory.Delete(textBox3.Text, true);
 
-                    Directory.CreateDirectory(textBox3.Text);
+                        Directory.CreateDirectory(textBox3.Text);
 
-                    Process cmd = new Process();
-                    cmd.StartInfo.FileName = Environment.SystemDirectory + @"\cmd.exe";
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + " & git init");
-                    cmd.Start();
-                    cmd.WaitForExit();
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + " & git remote add origin ssh://" + vars.username + @"@" + vars.dns + vars.prefrepo);
-                    cmd.Start();
-                    cmd.WaitForExit();
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + " & git pull origin master");
-                    cmd.Start();
-                    cmd.WaitForExit();
-                    DirectoryCopy(backuplocation + dirinfo.Name, textBox3.Text, true);
-                    System.IO.File.WriteAllText(textBox3.Text + @"\.gitignore", vars.ignoredpreffiles);
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + " & git add --all");
-                    cmd.Start();
-                    cmd.WaitForExit();
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + @" & git commit -m ""Initial preference commit for " + vars.fullname + @" on " + Environment.MachineName + @"""");
-                    cmd.Start();
-                    cmd.WaitForExit();
-                    cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + @" & git push origin master");
-                    cmd.Start();
-                    cmd.WaitForExit();
+                        Process cmd = new Process();
+                        cmd.StartInfo.FileName = Environment.SystemDirectory + @"\cmd.exe";
+                        cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + " & git init");
+                        cmd.Start();
+                        cmd.WaitForExit();
+                        cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + " & git remote add origin ssh://" + vars.username + @"@" + vars.dns + vars.prefrepo);
+                        cmd.Start();
+                        cmd.WaitForExit();
+                        cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + " & git pull origin master");
+                        cmd.Start();
+                        cmd.WaitForExit();
+                        DirectoryCopy(backuplocation + dirinfo.Name, textBox3.Text, true);
+                        System.IO.File.WriteAllText(textBox3.Text + @"\.gitignore", vars.ignoredpreffiles);
+                        cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + " & git add --all");
+                        cmd.Start();
+                        cmd.WaitForExit();
+                        cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + @" & git commit -m ""Initial preference commit for " + vars.fullname + @" on " + Environment.MachineName + @"""");
+                        cmd.Start();
+                        cmd.WaitForExit();
+                        cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + @" & git push origin master");
+                        cmd.Start();
+                        cmd.WaitForExit();
+                    }
                 }
+
+
+                try
+                {
+                    Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE", true).CreateSubKey("Semrau Software Consulting");
+                }
+                catch (Exception ex)
+                {
+                    Console.Write("Error: couldn't create reg key: " + ex.Message.ToString());
+                }
+                try
+                {
+                    Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE", true).OpenSubKey("Semrau Software Consulting", true).CreateSubKey("ProPsync");
+                }
+                catch (Exception ex)
+                {
+                    Console.Write("Error: couldn't create reg key: " + ex.Message.ToString());
+                }
+
+
+                Microsoft.Win32.RegistryKey key;
+
+                key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE").OpenSubKey("Semrau Software Consulting").OpenSubKey("ProPsync", true);
+                key.SetValue("dns", vars.dns);
+                key.SetValue("mediarepo", vars.mediarepo);
+                key.SetValue("libraryrepo", vars.libraryrepo);
+                key.SetValue("prefrepo", vars.prefrepo);
+                key.SetValue("synclib", vars.synclibrary);
+                key.SetValue("syncmedia", vars.syncmedia);
+                key.SetValue("syncpref", vars.syncpref);
+                key.SetValue("pro-ver", "6");
+                key.SetValue("username", vars.username);
+                key.SetValue("fullname", vars.fullname);
+                key.SetValue("libpath", textBox1.Text);
+                key.SetValue("mediapath", textBox2.Text);
+                key.SetValue("prefpath", textBox3.Text);
+                key.SetValue("mode", "auto");
+
+                key.Close();
+                this.Visible = false;
+                MessageBox.Show("Installation Completed!");
+                Application.Exit();
             }
-
-            
-            try
+            catch (Exception topex)
             {
-                Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE", true).CreateSubKey("Semrau Software Consulting");
-            }catch (Exception ex)
-            {
-                Console.Write("Error: couldn't create reg key: " + ex.Message.ToString());
+                MessageBox.Show("Fatal installation error: " + Environment.NewLine + topex.Message.ToString());
             }
-            try
-            {
-                Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE", true).OpenSubKey("Semrau Software Consulting", true).CreateSubKey("ProPsync");
-            }
-            catch (Exception ex)
-            {
-                Console.Write("Error: couldn't create reg key: " + ex.Message.ToString());
-            }
-
-
-            Microsoft.Win32.RegistryKey key;
-
-            key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE").OpenSubKey("Semrau Software Consulting").OpenSubKey("ProPsync", true);
-            key.SetValue("dns", vars.dns);
-            key.SetValue("mediarepo", vars.mediarepo);
-            key.SetValue("libraryrepo", vars.libraryrepo);
-            key.SetValue("prefrepo", vars.prefrepo);
-            key.SetValue("synclib", vars.synclibrary);
-            key.SetValue("syncmedia", vars.syncmedia);
-            key.SetValue("syncpref", vars.syncpref);
-            key.SetValue("pro-ver", "6");
-            key.SetValue("username", vars.username);
-            key.SetValue("fullname", vars.fullname);
-            key.SetValue("libpath", textBox1.Text);
-            key.SetValue("mediapath", textBox2.Text);
-            key.SetValue("prefpath", textBox3.Text);
-            key.SetValue("mode", "auto");
-
-            key.Close();
-            this.Visible = false;
-            MessageBox.Show("Installation Completed!");
-            Application.Exit();
+           
         }
 
         private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)

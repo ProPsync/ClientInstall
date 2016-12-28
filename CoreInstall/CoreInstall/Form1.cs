@@ -20,7 +20,9 @@ namespace CoreInstall
         string config = "";
 
         splash sph = new splash();
-       
+
+        System.Timers.Timer t = new System.Timers.Timer();
+
         public Form1()
         {
             InitializeComponent();
@@ -306,7 +308,7 @@ namespace CoreInstall
             vars.username = textBox2.Text;
             vars.fullname = textBox4.Text;
             vars.email = textBox5.Text;
-            this.Visible = false;
+            this.Opacity = 0;
             pp6install pp6i = new pp6install();
             pp6i.Show();
         }
@@ -324,7 +326,7 @@ namespace CoreInstall
             {
                 vars.agreeeula = false;
                 showsplash();
-                System.Timers.Timer t = new System.Timers.Timer();
+                
                 t.Interval = 3000;
                 t.AutoReset = true;
                 t.Elapsed += new ElapsedEventHandler(closesplash);
@@ -358,6 +360,7 @@ LogCloudSyncApp.txt";
             this.Enabled = true;
             this.Visible = true;
             this.Opacity = 100;
+            t.Stop();
         }
 
 
