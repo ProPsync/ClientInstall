@@ -26,3 +26,4 @@ C:\Users\Brian\Source\Repos\ProPresenter Sync\ClientInstall\CoreInstall\CoreInst
 C:\Users\Brian\Source\Repos\ProPresenter Sync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.splash.resources
 C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.eula.resources
 C:\misc\Repos\ProPsync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.splash.resources
+C:\Users\Brian\Source\Repos\ProPresenter Sync\ClientInstall\CoreInstall\CoreInstall\obj\Debug\CoreInstall.csprojResolveAssemblyReference.cache

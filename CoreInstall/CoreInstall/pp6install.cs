@@ -105,7 +105,7 @@ namespace CoreInstall
                     if ((!(textBox1.Text == "")) && (System.IO.Directory.Exists(textBox1.Text)))
                     {
                         DirectoryInfo dirinfo = new DirectoryInfo(textBox1.Text);
-                        DirectoryCopy(textBox1.Text, backuplocation + dirinfo.Name, true);
+                        DirectoryCopy(textBox1.Text, (backuplocation + "-library"), true);
 
                         System.IO.Directory.Delete(textBox1.Text, true);
 
@@ -122,7 +122,7 @@ namespace CoreInstall
                         cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + " & git pull origin master");
                         cmd.Start();
                         cmd.WaitForExit();
-                        DirectoryCopy(backuplocation + dirinfo.Name, textBox1.Text, true);
+                        DirectoryCopy((backuplocation + "-library"), textBox1.Text, true);
                         cmd.StartInfo.Arguments = (@"/C cd /d " + textBox1.Text + " & git add --all");
                         cmd.Start();
                         cmd.WaitForExit();
@@ -139,7 +139,7 @@ namespace CoreInstall
                     if ((!(textBox2.Text == "")) && (System.IO.Directory.Exists(textBox2.Text)))
                     {
                         DirectoryInfo dirinfo = new DirectoryInfo(textBox2.Text);
-                        DirectoryCopy(textBox2.Text, backuplocation + dirinfo.Name, true);
+                        DirectoryCopy(textBox2.Text, (backuplocation + "-media"), true);
 
                         System.IO.Directory.Delete(textBox2.Text, true);
 
@@ -156,7 +156,7 @@ namespace CoreInstall
                         cmd.StartInfo.Arguments = (@"/C cd /d " + textBox2.Text + " & git pull origin master");
                         cmd.Start();
                         cmd.WaitForExit();
-                        DirectoryCopy(backuplocation + dirinfo.Name, textBox2.Text, true);
+                        DirectoryCopy((backuplocation + "-media"), textBox2.Text, true);
                         cmd.StartInfo.Arguments = (@"/C cd /d " + textBox2.Text + " & git add --all");
                         cmd.Start();
                         cmd.WaitForExit();
@@ -173,7 +173,7 @@ namespace CoreInstall
                     if ((!(textBox3.Text == "")) && (System.IO.Directory.Exists(textBox3.Text)))
                     {
                         DirectoryInfo dirinfo = new DirectoryInfo(textBox3.Text);
-                        DirectoryCopy(textBox3.Text, backuplocation + dirinfo.Name, true);
+                        DirectoryCopy(textBox3.Text, (backuplocation + "-prefs"), true);
 
                         System.IO.Directory.Delete(textBox3.Text, true);
 
@@ -190,7 +190,7 @@ namespace CoreInstall
                         cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + " & git pull origin master");
                         cmd.Start();
                         cmd.WaitForExit();
-                        DirectoryCopy(backuplocation + dirinfo.Name, textBox3.Text, true);
+                        DirectoryCopy((backuplocation + "-prefs"), textBox3.Text, true);
                         System.IO.File.WriteAllText(textBox3.Text + @"\.gitignore", vars.ignoredpreffiles);
                         cmd.StartInfo.Arguments = (@"/C cd /d " + textBox3.Text + " & git add --all");
                         cmd.Start();
